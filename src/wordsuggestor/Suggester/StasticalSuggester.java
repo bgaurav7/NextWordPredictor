@@ -34,32 +34,36 @@ public class StasticalSuggester {
     
     private void searchSuggestions(ArrayList<String> to) {
         HashMap<String, Integer> map;
+        boolean chk = false;
+        String pword = "";
         
         if(to != null && to.size() > 0) {
-            //System.out.println("bigram");
+            //Suggesting word based on last written word
             String word = to.get(to.size() - 1);
-            //Bigram
             map = dst.getMap(word);
-            System.out.println(word); 
+            
             if(map != null) {
                 System.out.println(map.size());
                 for(String key : map.keySet()) {
                     wordQueue.add(new Word(key, probability(word, key), word, 1));
                 }
-            } else if (to.size() > 1) {
-                //word not found complete last word
-                //System.out.println("autocomplete");
-                String pword = to.get(to.size() - 2);
+            }    
+            
+            if (to.size() > 1) {
+                //complete last word
+                pword = to.get(to.size() - 2);
+                System.out.println(pword);
                 map = dst.getMap(pword);
-                
-                for(String key : map.keySet()) {
-                    if(key.startsWith(word)) {
-                        wordQueue.add(new Word(key, probability(pword, key), pword, 2));
+
+                if(map != null) {
+                    for(String key : map.keySet()) {
+                        if(key.startsWith(word) && key.compareTo(word) != 0) {
+                            wordQueue.add(new Word(key, 10 * probability(pword, key), pword, 2));
+                        }
                     }
                 }
-            } else {
-                System.out.println("No Suggestions");
             }
+            
         } else {
             //starting word
             //System.out.println("unigram");
