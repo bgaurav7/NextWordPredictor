@@ -28,7 +28,7 @@ public class SyntacticalSuggester {
         
         for(int i = 0; i < wa.size(); i++) {
             w = wa.remove();
-            HashMap<String, Integer> pwTags = dsp.getTags("<start>");
+            HashMap<String, Integer> pwTags = dsp.getTags(w.pword);
             HashMap<String, Integer> wTags = dsp.getTags(w.word);
             w.prob = probability(pwTags, wTags);
             wordQueue.add(w);
